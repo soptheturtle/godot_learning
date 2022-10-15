@@ -1,0 +1,57 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://TitleScreen.gd" type="Script" id=1]
+[ext_resource path="res://Art/fonts/Xolonium-Regular.ttf" type="DynamicFontData" id=2]
+
+[sub_resource type="DynamicFont" id=1]
+size = 24
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 12
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=4]
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=3]
+font_data = ExtResource( 2 )
+
+[node name="TitleScreen" type="CanvasLayer"]
+script = ExtResource( 1 )
+first_level = "res://Levels/Level1.tscn"
+
+[node name="GameTitle" type="Label" parent="."]
+margin_left = 36.0
+margin_right = 296.0
+margin_bottom = 30.0
+custom_fonts/font = SubResource( 1 )
+text = "Joe's Tutorial Work"
+
+[node name="Label" type="Label" parent="."]
+margin_left = 11.0
+margin_top = 135.0
+margin_right = 298.0
+margin_bottom = 178.0
+custom_fonts/font = SubResource( 2 )
+text = "Made by Joseph Garland with Help
+from the HeartBeast YT Tutorial"
+
+[node name="StartGameButton" type="Button" parent="."]
+margin_left = 108.0
+margin_top = 45.0
+margin_right = 214.0
+margin_bottom = 71.0
+custom_fonts/font = SubResource( 4 )
+text = "Start Game"
+
+[node name="QuitGameButton" type="Button" parent="."]
+margin_left = 108.0
+margin_top = 81.0
+margin_right = 216.0
+margin_bottom = 107.0
+custom_fonts/font = SubResource( 3 )
+text = "Quit Game"
+
+[connection signal="pressed" from="StartGameButton" to="." method="_on_StartGameButton_pressed"]
+[connection signal="pressed" from="QuitGameButton" to="." method="_on_QuitGameButton_pressed"]

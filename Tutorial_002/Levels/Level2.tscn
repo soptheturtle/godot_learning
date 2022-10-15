@@ -1,0 +1,27 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://Levels/Level.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Levels/TileMap.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Enemies/WalkingEnemy.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Levels/Checkpoint.tscn" type="PackedScene" id=4]
+[ext_resource path="res://CustomResources/Door.tscn" type="PackedScene" id=5]
+[ext_resource path="res://CustomResources/KillPlane.tscn" type="PackedScene" id=6]
+
+[node name="Level" instance=ExtResource( 1 )]
+levelNumber = 2
+
+[node name="TileMap" parent="." index="3" instance=ExtResource( 2 )]
+tile_data = PoolIntArray( -65530, 1, 65537, -65529, 1, 65538, -65528, 1, 65539, 65534, 1, 65537, 65535, 1, 65538, 0, 1, 65538, 1, 1, 65539, 4, 1, 65537, 5, 1, 65538, 6, 1, 65541, 7, 1, 393218, 8, 1, 65540, 9, 1, 65538, 10, 1, 65539, 13, 0, 0, 17, 0, 0, 22, 0, 0, 131070, 1, 393217, 131071, 1, 393218, 65536, 1, 393218, 65537, 1, 393219, 65540, 1, 393217, 65541, 1, 393218, 65542, 1, 393218, 65543, 1, 393218, 65544, 1, 393218, 65545, 1, 393218, 65546, 1, 393219, 196606, 1, 458753, 196607, 1, 458754, 131072, 1, 458754, 131073, 1, 458755, 131076, 1, 458753, 131077, 1, 458754, 131078, 1, 458754, 131079, 1, 458754, 131080, 1, 458754, 131081, 1, 458754, 131082, 1, 458755 )
+
+[node name="WalkingEnemy" parent="." index="4" instance=ExtResource( 3 )]
+position = Vector2( 135, -18 )
+
+[node name="Checkpoint" parent="." index="5" instance=ExtResource( 4 )]
+position = Vector2( 180, 0 )
+
+[node name="Door" parent="." index="6" instance=ExtResource( 5 )]
+position = Vector2( 405, 0 )
+target_level_path = "res://Levels/TitleScreen.tscn"
+
+[node name="KillPlane" parent="." index="8" instance=ExtResource( 6 )]
+position = Vector2( 0, 63 )
