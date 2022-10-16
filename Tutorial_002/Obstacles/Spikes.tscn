@@ -12,6 +12,7 @@ region_enabled = true
 region_rect = Rect2( 144, 54, 18, 18 )
 
 [node name="Hitbox" parent="." instance=ExtResource( 2 )]
+damageAmount = 600
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Hitbox"]
 polygon = PoolVector2Array( -7, 9, -7, 6, -6, 4, -5, 2, -3, 2, -2, 4, -1, 6, 1, 6, 3, 2, 5, 2, 7, 6, 7, 9 )

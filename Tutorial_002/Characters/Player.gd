@@ -5,6 +5,7 @@ enum { MOVE, CLIMB }
 
 export(Resource) var moveData = preload("res://CustomResources/DefaultPlayerMovementData.tres") as PlayerMovementData
 export(int) var playerHealth = 6
+export(float) var knockbackAmount = 150
 
 
 var velocity = Vector2.ZERO
@@ -14,12 +15,15 @@ var buffered_jump = false
 var coyote_jump = false
 var on_door = false
 var entered_kill_plane = false
+var invincible = false
 
 onready var animatedSprite: = $AnimatedSprite
 onready var ladderCheck: = $LadderCheck
 onready var jumpBufferTimer: = $JumpBufferTimer
 onready var coyoteJumpTimer: = $CoyoteJumpTimer
 onready var remoteTransform2D: = $RemoteTransform2D
+onready var invincibleTimer: = $InvincibleTimer
+
 
 func _ready():
 	animatedSprite.frames = load("res://Characters/PlayerGreenSkin.tres")
@@ -28,7 +32,6 @@ func _physics_process(delta):
 	var input = Vector2.ZERO
 	input.x = Input.get_axis("ui_left","ui_right")
 	input.y = Input.get_axis("ui_up","ui_down")
-	
 	match state:
 		MOVE: move_state(input,delta)
 		CLIMB: climb_state(input,delta)
@@ -85,22 +88,36 @@ func climb_state(input,delta):
 	velocity = input * moveData.climbSpeed
 	velocity = move_and_slide(velocity,Vector2.UP)
 
-func player_hurt(killPlaneEntry=0):
-	playerHealth -= 1
-	if(killPlaneEntry == 1):
-		entered_kill_plane = true
-		playerHealth = 0
-	SoundPlayer.play_sound(SoundPlayer.HURT)
-	if(playerHealth <= 0 || entered_kill_plane == true):
-		queue_free()
-		Events.emit_signal("player_died",playerHealth)
+func player_hurt(killPlaneEntry=0,damageAmount=1):
+	if(invincible == true):
+		check_killplane(killPlaneEntry)
+		return
 	else:
-		Events.emit_signal("player_hurt",playerHealth)
+		invincibleTimer.start()
+		invincible = true
+		playerHealth -= damageAmount
+		knockback_player(killPlaneEntry,damageAmount)
+		animatedSprite.modulate.a = 0.5
+		check_killplane(killPlaneEntry)
+		SoundPlayer.play_sound(SoundPlayer.HURT)
+		if(playerHealth <= 0 || entered_kill_plane == true):
+			queue_free()
+			Events.emit_signal("player_died",playerHealth)
+		else:
+			Events.emit_signal("player_hurt",playerHealth)
 
+func knockback_player(killPlaneEntry,damageAmount):
+	if(animatedSprite.flip_h && killPlaneEntry == 0):
+		velocity.x = -knockbackAmount 
+	elif(damageAmount > 100):
+		return
+	elif(killPlaneEntry == 0):
+		velocity.x = knockbackAmount
 
-func connect_camera(camera):
+func connect_camera(camera,cameraTL,cameraBR):
 	var camera_path = camera.get_path()
 	remoteTransform2D.remote_path = camera_path
+
 
 func input_jump_release():
 	if(Input.is_action_just_released("ui_up") && velocity.y < -moveData.min_jump_speed):
@@ -158,8 +175,22 @@ func apply_acceleration(amount,delta):
 	velocity.x = move_toward(velocity.x, moveData.move_speed * amount,moveData.player_acceleration * delta)
 	pass
 
+func check_killplane(killPlaneEntry):
+	if(killPlaneEntry ==1):
+		entered_kill_plane = true
+		playerHealth = 0
+		queue_free()
+		Events.emit_signal("player_died",playerHealth)
+
 func _on_JumpBufferTimer_timeout():
 	buffered_jump = false
 
 func _on_CoyoteJumpTimer_timeout():
 	coyote_jump = false
+
+
+func _on_InvincibleTimer_timeout():
+	invincible = false
+	animatedSprite.modulate.a = 1.0
+	animatedSprite.animation = "Idle"
+	pass # Replace with function body.

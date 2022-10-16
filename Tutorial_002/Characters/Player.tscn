@@ -14,7 +14,7 @@ script = ExtResource( 2 )
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 position = Vector2( 0, -12 )
 frames = ExtResource( 1 )
-animation = "Jump"
+animation = "Idle"
 playing = true
 flip_h = true
 
@@ -40,5 +40,9 @@ one_shot = true
 [node name="RemoteTransform2D" type="RemoteTransform2D" parent="."]
 position = Vector2( 0, -12 )
 
+[node name="InvincibleTimer" type="Timer" parent="."]
+wait_time = 1.5
+
 [connection signal="timeout" from="JumpBufferTimer" to="." method="_on_JumpBufferTimer_timeout"]
 [connection signal="timeout" from="CoyoteJumpTimer" to="." method="_on_CoyoteJumpTimer_timeout"]
+[connection signal="timeout" from="InvincibleTimer" to="." method="_on_InvincibleTimer_timeout"]

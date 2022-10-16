@@ -9,11 +9,6 @@ export(Texture) var emptyHeart
 export(Texture) var halfHeart
 export(Texture) var fullHeart
 
-
-# Called when the node enters the scene tree for the first time.
-
-
-
 func update_message_text(levelNumber):
 	levelId.text = "Level " + str(levelNumber)
 
@@ -44,9 +39,14 @@ func update_hud_health(playerHealth):
 			fullHeart(healthSprite2)
 			halfHeart(healthSprite3)
 		6: 
+			
 			fullHeart(healthSprite1)
 			fullHeart(healthSprite2)
 			fullHeart(healthSprite3)
+	if(playerHealth < 0):
+		emptyHeart(healthSprite1)
+		emptyHeart(healthSprite2)
+		emptyHeart(healthSprite3)
 
 func emptyHeart(hpSprite):
 	hpSprite.animation = "EmptyHeart"
